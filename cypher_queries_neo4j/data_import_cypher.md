@@ -2,8 +2,6 @@
 
 #### Query 1: Cypher query for importing the data retrieved in a csv file, to the graph database Neo4j. 
 
-Timeframe 01.08.21 - 07.08.21
-
 ```cypher
 //integrity constraints
 CREATE CONSTRAINT UniqueDevice ON (d:Device) ASSERT d.cookie_value IS UNIQUE;
