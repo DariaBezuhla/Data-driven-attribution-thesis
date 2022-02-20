@@ -4,7 +4,7 @@
 
 To extract data needed for the first data set, I need to do the following operations with the data:
 
-* used CTE (common table expression) in SQL to get data from `fact_leadins` and `fact_leadouts` tables.
+* used CTE (common table expression) in SQL to get data from 2 tables.
 * filter data by `date`, and set the time frame for the extracted entries.
 * filter data by `country` and `brand`, only to have idealo website in Germany.
 * calculate amount of leadouts per touchpoint.
@@ -22,21 +22,21 @@ with leadin as
   cookie_value,
   mkt_channel
   FROM
-    dl_dwh_prod.fact_leadins
+     table_name
   WHERE 1=1
     and date(date_utc) BETWEEN date('2021-07-01') and date('2021-07-07')
     and country LIKE 'DE'
     and brand = 'idealo'
     ),
  
--- CTE to extract data from fact_leadouts table
+-- CTE to extract data from database table
 
 leadouts as
 (SELECT
   revisit_session_id as lo_revisit_session_id,
   leadout_type
 FROM 
- dl_dwh_prod.fact_leadouts
+ table_name
 where 1=1
    and date(date_utc) BETWEEN date('2021-07-01') and date('2021-07-07')
    and country LIKE 'DE'
@@ -70,8 +70,8 @@ group by 1,2,3,4
 with userCohort AS 
   (SELECT DISTINCT 
          lo.cookie_value as cohort_cookie_value
-    FROM dl_dwh_prod.fact_leadouts AS lo
-    INNER JOIN dl_dwh_prod.fact_leadins AS li
+    FROM database_name AS lo
+    INNER JOIN table_name AS li
         ON lo.cookie_value = li.cookie_value 
     WHERE 1=1
             AND date(li.date_utc) = date('2021-07-01')
@@ -85,7 +85,7 @@ leadins AS
          revisit_session_id,
          cookie_value as li_cookie_value,
          mkt_channel
-    FROM dl_dwh_prod.fact_leadins
+    FROM table_name
   
     WHERE 1=1 
             AND date(date_utc) BETWEEN date('2021-07-01') and date('2021-07-07')
@@ -93,13 +93,13 @@ leadins AS
             AND brand = 'idealo' 
             AND cookie_value IN (SELECT cohort_cookie_value FROM userCohort) ),
  
--- CTE to extract data from fact_leadouts table, and filter by cookie_value from user_cohort CTE 
+-- CTE to extract data from table_name table, and filter by cookie_value from user_cohort CTE 
 
 leadouts AS 
     (SELECT revisit_session_id AS lo_revisit_session_id,
          leadout_type,
          cookie_value AS lo_cookie_value
-    FROM dl_dwh_prod.fact_leadouts
+    FROM table_name
     WHERE 1=1
             AND date(date_utc) BETWEEN date('2021-07-01') and date('2021-07-07')
             AND country LIKE 'DE'
