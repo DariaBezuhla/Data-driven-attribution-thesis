@@ -26,14 +26,20 @@ This will create nodes and relationship between nodes, for all the created entit
 
  ![Screenshot 2022-02-20 at 19 53 33](https://user-images.githubusercontent.com/33038445/154859175-2670947d-7d20-43ac-acc6-7e0fa57177bb.png)
 
-### 2.2 Last-touch attribution model.
+### 2.2 Last/first-touch attribution model.
 
 Now let's finally build a last-touch attribution model with Neo4j. Full query can be found in [cypher_queries_neo4j/last_and_first_touch_attribution.md](cypher_queries_neo4j/last_and_first_touch_attribution.md)
 
-Basically in the query we do the following steps: 
-* sort the touchpoints by timestamp in chronologocal order - from the ones that happened forst to the ones that happened last
-* create a collection of those timestamps  
+In the query we do the following steps: 
+* collect the timestamps and create a collection of them 
+* sort them sequentially
 * create a relationship to each Touchpoint node, that is the last in the collection of timestamps. 
 
-We do similar data manipulation, but taking the first timestap from the copllection, instead of the last on for first-touch attribution model. As a result we find out which of the timestamp was the last one in the user journey, and we can see it with the relationship in the Neo4j interface: 
+Similar data manipulation needs to be done to build first-touch attribution model by taking the first timestamp from the collection. 
+As a result we can see in the Neo4j interface which of touchpoint of each device was last/first:
+ 
 ![Screenshot 2022-02-20 at 20 03 28](https://user-images.githubusercontent.com/33038445/154859643-983d6c3b-14b5-4e80-9db7-2839f97962f5.png)
+
+### 2.3 Linear attribution model.
+
+
