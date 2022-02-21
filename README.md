@@ -1,4 +1,4 @@
-# Data-driven-attribution-thesis
+# Using Cypher query language and Neo4j graph database for building first-, last-touch, and linear attribution models 
 
 Here is the practical step by step on how to use the code and queries in Cypher in this repository to buld a rule based first/last-touch and linear attribution models, using Neo4j graph database. 
 
